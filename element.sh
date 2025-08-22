@@ -5,6 +5,7 @@
 PSQL="psql --username=freecodecamp --dbname=periodic_table -t --no-align -c"
 
 GET_ELEMENT_INFO () {
+  # get all needed info from database
   ATOMIC_NUMBER=$($PSQL "select atomic_number from elements where atomic_number=$1")
   EL_NAME=$($PSQL "select name from elements where atomic_number=$1")
   EL_SYMBOL=$($PSQL "select symbol from elements where atomic_number=$1")
@@ -12,6 +13,7 @@ GET_ELEMENT_INFO () {
   ATOMIC_MASS=$($PSQL "select atomic_mass from properties where atomic_number=$1")
   MELTING_POINT=$($PSQL "select melting_point_celsius from properties where atomic_number=$1")
   BOILING_POINT=$($PSQL "select boiling_point_celsius from properties where atomic_number=$1")
+  # and print info
   echo "The element with atomic number $ATOMIC_NUMBER is $EL_NAME ($EL_SYMBOL). It's a $EL_TYPE, with a mass of $ATOMIC_MASS amu. $EL_NAME has a melting point of $MELTING_POINT celsius and a boiling point of $BOILING_POINT celsius."
 }
 
@@ -30,7 +32,7 @@ else
     # if not found
     if [[ -z $ELEMENT_NUMBER ]]
     then
-      echo "I could not find that element's number in the database."
+      echo "I could not find that element in the database."
     # otherwise run 'get info' function
     else
       GET_ELEMENT_INFO $ELEMENT_NUMBER
@@ -44,7 +46,7 @@ else
     # if not found
     if [[ -z $ELEMENT_NUMBER ]]
     then
-      echo "I could not find that element's name or symbol in the database."
+      echo "I could not find that element in the database."
     # otherwise run 'get info' function
     else
       GET_ELEMENT_INFO $ELEMENT_NUMBER
