@@ -6,9 +6,9 @@ PSQL="psql --username=freecodecamp --dbname=periodic_table -t --no-align -c"
 
 GET_ELEMENT_INFO () {
   echo "info about $1"
-  ATOMIC_NUMBER=$($PSQL "select atomic_number from elements where name='$1'")
-  EL_NAME=$($PSQL "select name from elements where name='$1'")
-  EL_SYMBOL=$($PSQL "select symbol from elements where name='$1'")
+  ATOMIC_NUMBER=$($PSQL "select atomic_number from elements where atomic_number=$1")
+  EL_NAME=$($PSQL "select name from elements where atomic_number=$1")
+  EL_SYMBOL=$($PSQL "select symbol from elements where atomic_number=$1")
   EL_TYPE=$($PSQL "")
   ATOMIC_MASS=$($PSQL "")
   MELTING_POINT=$($PSQL "")
@@ -27,31 +27,31 @@ else
   # check for element in 'elements' table by possible number
   if [[ $1 =~ ^[0-9]+$ ]]
   then
-    ELEMENT_NAME=$($PSQL "
-      select name from elements
+    ELEMENT_NUMBER=$($PSQL "
+      select atomic_number from elements
       where atomic_number=$1
     ")
     # if not found
-    if [[ -z $ELEMENT_NAME ]]
+    if [[ -z $ELEMENT_NUMBER ]]
     then
       echo "I could not find that element's number in the database."
     # otherwise run 'get info' function
     else
-      GET_ELEMENT_INFO $ELEMENT_NAME
+      GET_ELEMENT_INFO $ELEMENT_NUMBER
     fi
   # check for element in 'elements' table by possible name or symbol
   else
-    ELEMENT_NAME=$($PSQL "
-      select name from elements
+    ELEMENT_NUMBER=$($PSQL "
+      select atomic_number from elements
       where symbol='$1' or name='$1'
     ")
     # if not found
-    if [[ -z $ELEMENT_NAME ]]
+    if [[ -z $ELEMENT_NUMBER ]]
     then
       echo "I could not find that element's name or symbol in the database."
     # otherwise run 'get info' function
     else
-      GET_ELEMENT_INFO $ELEMENT_NAME
+      GET_ELEMENT_INFO $ELEMENT_NUMBER
     fi
   fi
 fi
