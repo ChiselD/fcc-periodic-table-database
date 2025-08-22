@@ -6,6 +6,17 @@ PSQL="psql --username=freecodecamp --dbname=periodic_table -t --no-align -c"
 
 GET_ELEMENT_INFO () {
   echo "info about $1"
+  ATOMIC_NUMBER=$($PSQL "select atomic_number from elements where name='$1'")
+  EL_NAME=$($PSQL "select name from elements where name='$1'")
+  EL_SYMBOL=$($PSQL "select symbol from elements where name='$1'")
+  EL_TYPE=$($PSQL "")
+  ATOMIC_MASS=$($PSQL "")
+  MELTING_POINT=$($PSQL "")
+  BOILING_POINT=$($PSQL "")
+  echo $ATOMIC_NUMBER
+  echo "The element with atomic number $ATOMIC_NUMBER is $EL_NAME ($EL_SYMBOL).
+    It's a nonmetal, with a mass of 1.008 amu.
+    Hydrogen has a melting point of -259.1 celsius and a boiling point of -252.9 celsius."
 }
 
 # check if user entered an argument
